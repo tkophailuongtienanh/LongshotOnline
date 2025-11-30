@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function RollDiceSection() {
+export default function RollDiceSection({ rerollId, d6, d8, onSendSignalR }) {
     const canvasRef = useRef(null);
     const diskRef = useRef(null);
     const bowlRef = useRef(null);
@@ -9,7 +9,19 @@ export default function RollDiceSection() {
 
     const runningRef = useRef(true);
     const rafRef = useRef(null);
+    let currentResultD6 = ""
+    let oldResultD6 = ""
+    let currentResultD8 = ""
+    let oldResultD8 = ""
+    const [curResult, setCurResult] = useState({})
+    const [oldResult, setOldResult] = useState({})
 
+    // Update image src theo giá trị d6/d8
+    useEffect(() => {
+        setOldResult(curResult);
+        setCurResult({ d6, d8 });
+        handleReplay();
+    }, [d6, d8, rerollId]);
     const draw = () => {
         if (!runningRef.current) return;
 
@@ -18,78 +30,44 @@ export default function RollDiceSection() {
 
         const disk = diskRef.current; // video đĩa
         const bowl = bowlRef.current; // video bát
-        const d8 = d8ref.current;   // hình ảnh ở giữa
-        const d6 = d6ref.current;
+        const d8cur = d8ref.current;   // hình ảnh ở giữa
+        const d6cur = d6ref.current;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // 1. ĐĨA (layer dưới cùng)
         ctx.drawImage(disk, 0, 0, canvas.width, canvas.height);
 
         // 2. ẢNH ở giữa
-        if (disk.duration - disk.currentTime <= 0.8) {
-            // ctx.drawImage(img1, 100, 100, 150, 150);
-            // ctx.drawImage(img2, 300, 100, 150, 150);
+        if (disk.currentTime <= 0.32) {
+            // Hiển thị kết quả cũ (trước khi animation chạy)
+            if (d6cur) d6cur.src = `/images/components/d6-${oldResult.d6}.png`;
+            if (d8cur) d8cur.src = `/images/components/d8-${oldResult.d8}.png`;
+        } else {
+            // Hiển thị kết quả mới
+            if (d6cur) d6cur.src = `/images/components/d6-${curResult.d6}.png`;
+            if (d8cur) d8cur.src = `/images/components/d8-${curResult.d8}.png`;
+        }
+        if (disk.currentTime <= 0.32 || disk.duration - disk.currentTime <= 0.8) {
+            // 1.1. ẢNH D6
             ctx.drawImage(
-                d6,
+                d6cur,
                 canvas.width * 0.315,
                 canvas.height * 0.5,
                 canvas.width * 0.18,
                 canvas.height * 0.18
             );
-            // 2. ẢNH ở giữa
+            // 1.2. ẢNH D8
             ctx.drawImage(
-                d8,
+                d8cur,
                 canvas.width * 0.525,
                 canvas.height * 0.5,
                 canvas.width * 0.2 * 0.87,
                 canvas.height * 0.2
             );
         }
-
-        ctx.save(); // lưu trạng thái canvas
-
-        // 3. BÁT (layer trên cùng)
-        // const sx = 0;
-        // const sy = 0; // bắt đầu từ trên cùng
-        // const sWidth = bowl.videoWidth;
-        // const sHeight = bowl.videoHeight * 0.6; // lấy nửa trên
-
-        // const dx = 0;
-        // const dy = 0;
-        // const dWidth = canvas.width;
-        // const dHeight = canvas.height / 2; // vẽ nửa trên canvas
-        // ctx.drawImage(bowl, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-        // ctx.drawImage(bowl, 0, 0, canvas.width, canvas.height);
-        ctx.moveTo(0, 0);                     // góc trên trái
-        if (disk.currentTime <= 0.8 || disk.duration - disk.currentTime <= 0.8) {
-            ctx.lineTo(0, canvas.height * 0.25);                     // góc trên trái
-            ctx.lineTo(canvas.width, canvas.height * 0.635);          // góc trên phải
-        } else {
-            // disk.duration
-            const t = disk.currentTime;
-            const position = ((t - 0.8) * 0.3 / 1.4) + 0.25;
-            const position2 = ((t - 0.8) * 0.2 / 1.4) + 0.635;
-            ctx.lineTo(0, canvas.height * position);                     // góc trên trái
-            ctx.lineTo(canvas.width, canvas.height * position2);          // góc trên phải
-        }
-        ctx.lineTo(canvas.width, 0);
-        ctx.closePath();
-
-        // ctx.beginPath();
-        // ctx.moveTo(0, canvas.height * 0.25);                     // góc trên trái
-        // ctx.lineTo(canvas.width, canvas.height * 0.635);          // góc trên phải
-        // ctx.lineTo(canvas.width, 0); // góc phải nửa dưới
-        // // ctx.lineTo(0, canvas.width);         // góc trái dưới
-        // ctx.closePath();
-
-        ctx.clip(); // mọi thứ vẽ sau đây chỉ hiển thị trong path
-
         ctx.drawImage(bowl, 0, 0, canvas.width, canvas.height);
-
         ctx.restore();
-
         rafRef.current = requestAnimationFrame(draw);
-        // requestAnimationFrame(draw);
     };
 
     const handleReplay = () => {
@@ -110,7 +88,7 @@ export default function RollDiceSection() {
             draw();
         }, 60);
     };
-
+    const handleSignalR = onSendSignalR
     useEffect(() => {
         const start = async () => {
             await diskRef.current.play();
@@ -125,20 +103,18 @@ export default function RollDiceSection() {
 
     return (
         <div className="flex justify-center">
-            {/* Canvas hiển thị kết quả cuối */}
             <canvas
                 ref={canvasRef}
-                width={200}
-                height={200}
+                width={500}
+                height={500}
                 className="border"
-                onClick={() => { handleReplay() }}
+                onClick={handleSignalR}
             />
-
             {/* Video + ảnh ẩn, chỉ dùng làm input cho canvas */}
-            <video ref={diskRef} src="/images/components/khay500x500.mp4" muted playsInline hidden />
-            <video ref={bowlRef} src="/images/components/vung500x500.mp4" muted playsInline hidden />
-            <img ref={d8ref} src="/images/components/d8-5.png" alt="" hidden />
-            <img ref={d6ref} src="/images/components/d6-2.png" alt="" hidden />
+            <video ref={diskRef} src="/images/components/khay500x500.webm" muted playsInline hidden />
+            <video ref={bowlRef} src="/images/components/vung500x500.webm" muted playsInline hidden />
+            <img ref={d8ref} src={`/images/components/d8-${d8}.png`} alt="" hidden />
+            <img ref={d6ref} src={`/images/components/d6-${d6}.png`} alt="" hidden />
         </div>
     );
 }

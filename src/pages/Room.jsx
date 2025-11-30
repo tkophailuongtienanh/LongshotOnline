@@ -12,64 +12,8 @@ export default function Room() {
     const { connected, roomId } = useSignalRGame();
     const [gameStarted, setGameStarted] = useState(false);
     const [showPlayMat, setShowPlayMat] = useState(false);
-
-    const canvasRef = useRef(null);
-    const diskRef = useRef(null);
-    const bowlRef = useRef(null);
-    const imgRef = useRef(null);
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-
-        const disk = diskRef.current; // video đĩa
-        const bowl = bowlRef.current; // video bát
-        const img = imgRef.current;   // hình ảnh ở giữa
-
-        let running = true;
-
-        // play đồng thời video
-        const startVideos = async () => {
-            try {
-                await disk.play();
-                await bowl.play();
-            } catch (e) {
-                console.warn("Auto-play bị chặn, cần click để bắt đầu video");
-            }
-
-            draw();
-        };
-
-        const draw = () => {
-            if (!running) return;
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // 1. ĐĨA (layer dưới cùng)
-            ctx.drawImage(disk, 0, 0, canvas.width, canvas.height);
-
-            // 2. ẢNH ở giữa
-            ctx.drawImage(
-                img,
-                canvas.width * 0.25,
-                canvas.height * 0.25,
-                canvas.width * 0.5,
-                canvas.height * 0.5
-            );
-
-            // 3. BÁT (layer trên cùng)
-            ctx.drawImage(bowl, 0, 0, canvas.width, canvas.height);
-
-            requestAnimationFrame(draw);
-        };
-
-        startVideos();
-
-        return () => {
-            running = false;
-        };
-    }, [canvasRef])
+    const [diceResult, setDiceResult] = useState({ d6: 1, d8: 1 })
+const [playTrigger, setPlayTrigger] = useState(0);
 
     useEffect(() => {
         if (rid && rid != '' && connected) {
@@ -84,10 +28,17 @@ export default function Room() {
                 console.log('GameStarted ', message);
                 setGameStarted(true);
             })
+
+            gameConnection.on("DiceResult", (message) => {
+                console.log('DiceResult ', message);
+                setPlayTrigger(prev=>prev+1);
+                setDiceResult(message);
+            })
         }
         return () => {
             gameConnection.off("PlayerListChange");
             gameConnection.off("GameStarted");
+            gameConnection.off("DiceResult");
         }
     }, [connected, rid]);
 
@@ -120,7 +71,15 @@ export default function Room() {
             <h1 className="text-xl text-center font-bold mb-4">Phòng</h1>
             <div className="Gamezone flex">
                 <PlayersSection players={players} />
-                <RollDiceSection></RollDiceSection>
+                <RollDiceSection
+                    rerollId={`${playTrigger}`}
+                    d6={diceResult.d6}
+                    d8={diceResult.d8}
+                    onSendSignalR={() => {
+                        console.log("Button clicked:");
+                        gameConnection.invoke("RerollDice", rid);
+                    }}
+                />
                 <div className="fixed bottom-0 left-0 w-full flex justify-center">
                     <div className="flex justify-center p-3 border rounded-tl rounded-tr" style={{ width: '500px', height: '50px' }}
                         onClick={() => setShowPlayMat(!showPlayMat)}>
