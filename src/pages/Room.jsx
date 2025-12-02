@@ -4,6 +4,7 @@ import PlayerList from "../components/PlayerList";
 import PlayersSection from "../components/Room/PlayersSection";
 import RollDiceSection from "../components/Room/RollDiceSection";
 import { gameConnection, useSignalRGame } from "../hooks/useSignalR";
+import PlayerBoardSection from "../components/Room/PlayerBoardSection"
 
 const scaleRate = 5;
 export default function Room() {
@@ -13,7 +14,7 @@ export default function Room() {
     const [gameStarted, setGameStarted] = useState(false);
     const [showPlayMat, setShowPlayMat] = useState(false);
     const [diceResult, setDiceResult] = useState({ d6: 1, d8: 1 })
-const [playTrigger, setPlayTrigger] = useState(0);
+    const [playTrigger, setPlayTrigger] = useState(0);
 
     useEffect(() => {
         if (rid && rid != '' && connected) {
@@ -31,7 +32,7 @@ const [playTrigger, setPlayTrigger] = useState(0);
 
             gameConnection.on("DiceResult", (message) => {
                 console.log('DiceResult ', message);
-                setPlayTrigger(prev=>prev+1);
+                setPlayTrigger(prev => prev + 1);
                 setDiceResult(message);
             })
         }
@@ -87,8 +88,13 @@ const [playTrigger, setPlayTrigger] = useState(0);
                     </div>
                 </div>
                 <div className="PlayMat absolute duration-600 ease-in-out w-screen flex justify-center left-0" style={{ zIndex: '500', bottom: showPlayMat ? '100px' : '-2000px' }}>
-                    <div className="content" style={{ width: 180 * scaleRate + 'px' }}>
-                        <img src="/images/components/board.png" alt="" className="h-full" />
+                    <div className="content" style={{ width: 210 * scaleRate + 'px' }}>
+                        {/* <img src="/images/components/board.png" alt="" className="h-full" /> */}
+                        <PlayerBoardSection
+                            width={210 * scaleRate}
+                            allowedZones={[1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]}   // zone được hover
+                            blockedZones={[2, 10]}              // zone bị đánh dấu X
+                        />
                     </div>
                 </div>
             </div>

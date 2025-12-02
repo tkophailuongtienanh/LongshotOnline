@@ -1,0 +1,43 @@
+{
+    "round": 1,
+    "currentDice8": 1,
+    "currentDice6": 2,
+    "dogList": [
+        {
+            "name": "Béc giê",
+            "code": "d11",
+            "ability": "Béc giê",
+            "position": 0,
+            "owner": "abcxyz"
+        },
+        {
+            "name": "Béc giê",
+            "code": "d12",
+            "ability": "Béc giê",
+            "position": 1,
+            "owner": "abcxyz"
+        }
+    ],
+    "playerList":[
+        {
+            "name": "abc",
+            "id": "abc",
+            "order": 1,
+            "money": 12,
+            "dogOwned": ["d11","d15"],
+            "actionUsed": ["1","9"],
+            "foodAmount" : 3,
+            "isFirstPlayer": true
+        },
+        {
+            "name": "abc",
+            "id": "abc",
+            "order": 2,
+            "money": 12,
+            "dogOwned": ["d13","d14"],
+            "actionUsed": ["1","9"],
+            "foodAmount" : 3,
+            "isFirstPlayer": true
+        }
+    ]
+}
