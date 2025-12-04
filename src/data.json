@@ -7,26 +7,41 @@
             "name": "Béc giê",
             "code": "d11",
             "ability": "Béc giê",
+            "image": "",
             "position": 0,
-            "owner": "abcxyz"
+            "owner": "abcxyz",
+            "secondMove": [
+                "d11",
+                "d13",
+                "d15"
+            ],
+            "secondMoveByPlayer": []
         },
         {
             "name": "Béc giê",
             "code": "d12",
             "ability": "Béc giê",
             "position": 1,
-            "owner": "abcxyz"
+            "owner": "abcxyz",
+            "secondMove": [],
+            "secondMoveByPlayer": []
         }
     ],
-    "playerList":[
+    "playerList": [
         {
             "name": "abc",
             "id": "abc",
             "order": 1,
             "money": 12,
-            "dogOwned": ["d11","d15"],
-            "actionUsed": ["1","9"],
-            "foodAmount" : 3,
+            "dogOwned": [
+                "d11",
+                "d15"
+            ],
+            "actionUsed": [
+                "1",
+                "9"
+            ],
+            "foodAmount": 3,
             "isFirstPlayer": true
         },
         {
@@ -34,9 +49,15 @@
             "id": "abc",
             "order": 2,
             "money": 12,
-            "dogOwned": ["d13","d14"],
-            "actionUsed": ["1","9"],
-            "foodAmount" : 3,
+            "dogOwned": [
+                "d13",
+                "d14"
+            ],
+            "actionUsed": [
+                "1",
+                "9"
+            ],
+            "foodAmount": 3,
             "isFirstPlayer": true
         }
     ]
