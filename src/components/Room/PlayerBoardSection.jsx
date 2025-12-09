@@ -31,6 +31,7 @@ export default function PlayerBoardSection({ width = 0, height = 0, allowedZones
             setAlias(parseFloat(height) / BGH);
         }
         console.log(alias);
+        draw();
     }, [width, height])
 
     useEffect(() => {
@@ -45,6 +46,21 @@ export default function PlayerBoardSection({ width = 0, height = 0, allowedZones
 
         bgImg.current = new Image();
         bgImg.current.src = "/images/components/board.png";
+
+        if (width > 0) {
+            setAlias(parseFloat(width) / BGW);
+            setZones(ACTIONS.map(a => {
+                return {
+                    id: a.id,
+                    x: a.x * parseFloat(width) / BGW,
+                    y: a.y * parseFloat(width) / BGW,
+                    w: a.w * parseFloat(width) / BGW,
+                    h: a.h * parseFloat(width) / BGW
+                }
+            }))
+        } else if (height > 0) {
+            setAlias(parseFloat(height) / BGH);
+        }
 
         bgImg.current.onload = () => draw();
     }, []);
@@ -69,11 +85,10 @@ export default function PlayerBoardSection({ width = 0, height = 0, allowedZones
         blockedZones.forEach((id) => {
             const zone = zones.find((z) => z.id === id);
             if (!zone) return;
-
             ctx.drawImage(
                 blockImg.current,
                 zone.x,
-                zone.y,
+                zone.y, 
                 zone.w,
                 zone.h
             );
