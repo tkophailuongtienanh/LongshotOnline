@@ -18,11 +18,18 @@ export default function RollDiceSection({ rerollId, d6, d8, onSendSignalR }) {
 
     // Update image src theo giá trị d6/d8
     useEffect(() => {
+        console.log(`component: ${d6} , ${d8}`);
         setOldResult(curResult);
         setCurResult({ d6, d8 });
         handleReplay();
     }, [d6, d8, rerollId]);
+    
+    useEffect(() => {
+        handleReplay();
+    }, [curResult]);
+
     const draw = () => {
+        // console.log(`curResult: ${curResult}`, curResult);
         if (!runningRef.current) return;
 
         const canvas = canvasRef.current;

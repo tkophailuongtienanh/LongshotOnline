@@ -46,6 +46,7 @@ export default function Room() {
             gameConnection.off("PlayerListChange");
             gameConnection.off("GameStarted");
             gameConnection.off("DiceResult");
+            gameConnection.off("SetAction");
         }
     }, [connected, rid]);
 

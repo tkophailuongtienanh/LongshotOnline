@@ -15,24 +15,24 @@ export default function PlayerBoardSection({ width = 0, height = 0, allowedZones
     const [alias, setAlias] = useState(1);
     const [zones, setZones] = useState([]);
 
-    useEffect(() => {
-        if (width > 0) {
-            setAlias(parseFloat(width) / BGW);
-            setZones(ACTIONS.map(a => {
-                return {
-                    id: a.id,
-                    x: a.x * alias,
-                    y: a.y * alias,
-                    w: a.w * alias,
-                    h: a.h * alias
-                }
-            }))
-        } else if (height > 0) {
-            setAlias(parseFloat(height) / BGH);
-        }
-        console.log(alias);
-        draw();
-    }, [width, height])
+    // useEffect(() => {
+    //     if (width > 0) {
+    //         setAlias(parseFloat(width) / BGW);
+    //         setZones(ACTIONS.map(a => {
+    //             return {
+    //                 id: a.id,
+    //                 x: a.x * alias,
+    //                 y: a.y * alias,
+    //                 w: a.w * alias,
+    //                 h: a.h * alias
+    //             }
+    //         }))
+    //     } else if (height > 0) {
+    //         setAlias(parseFloat(height) / BGH);
+    //     }
+    //     console.log(alias);
+    //     draw();
+    // }, [width, height])
 
     useEffect(() => {
         overlayImg1.current = new Image();
