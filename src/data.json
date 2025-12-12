@@ -4,27 +4,120 @@
     "currentDice6": 2,
     "dogList": [
         {
-            "name": "Béc giê",
+            "name": "Beagle",
             "code": "d11",
-            "ability": "Béc giê",
+            "price": 10,
+            "abilityTime": "Khi Bingo",
+            "abilityEffect": "Nếu hoàn thành hàng dọc, bạn được tích thêm 1 ô Bingo bất kỳ.",
             "image": "",
+            "secondMoveDefault": [
+                "d16"
+            ],
             "position": 0,
             "owner": "abcxyz",
-            "secondMove": [
-                "d11",
-                "d13",
-                "d15"
-            ],
-            "secondMoveByPlayer": []
+            "secondMove": []
         },
         {
-            "name": "Béc giê",
+            "name": "Phốc",
             "code": "d12",
-            "ability": "Béc giê",
-            "position": 1,
+            "price": 10,
+            "abilityTime": "Khi lắc ra chó 2",
+            "abilityEffect": "Nhận 2$.",
+            "image": "",
+            "secondMoveDefault": [
+                "d15"
+            ],
+            "position": 0,
             "owner": "abcxyz",
-            "secondMove": [],
-            "secondMoveByPlayer": []
+            "secondMove": []
+        },
+        {
+            "name": "Husky",
+            "code": "d13",
+            "price": 8,
+            "abilityTime": "Khi Bingo",
+            "abilityEffect": "Bạn có thể tích cho chó +1 hoặc chó -1 đối với chú chó được lắc ra",
+            "image": "",
+            "secondMoveDefault": [
+                "d11"
+            ],
+            "position": 0,
+            "owner": "abcxyz",
+            "secondMove": []
+        },
+        {
+            "name": "Corgi",
+            "code": "d14",
+            "price": 8,
+            "abilityTime": "Khi cược",
+            "abilityEffect": "Bạn sẽ được cược free khi bạn cược vào chú chó bạn chưa có vé cược.",
+            "image": "",
+            "secondMoveDefault": [
+                "d12"
+            ],
+            "position": 0,
+            "owner": "abcxyz",
+            "secondMove": []
+        },
+        {
+            "name": "Dalmatian",
+            "code": "d15",
+            "price": 6,
+            "abilityTime": "Khi Bingo",
+            "abilityEffect": "Nếu hoàn thành hàng ngang, bạn được lùi một chú chó bất kỳ 1 bước.",
+            "image": "",
+            "secondMoveDefault": [
+                "d11",
+                "d14"
+            ],
+            "position": 0,
+            "owner": "abcxyz",
+            "secondMove": []
+        },
+        {
+            "name": "Shiba",
+            "code": "d16",
+            "price": 6,
+            "abilityTime": "Khi mua chú chó này",
+            "abilityEffect": "+Tích 1 ô bingo bất kỳ.\r\n+Tích 1 chân bất kỳ.\r\n+Tích 1 xương bất kỳ.",
+            "image": "",
+            "secondMoveDefault": [
+                "d12",
+                "d13"
+            ],
+            "position": 0,
+            "owner": "abcxyz",
+            "secondMove": []
+        },
+        {
+            "name": "Becgie",
+            "code": "d17",
+            "price": 4,
+            "abilityTime": "Khi tính điểm",
+            "abilityEffect": "Nhận 2$ cho mỗi chú chó bạn có vé.",
+            "image": "",
+            "secondMoveDefault": [
+                "d11",
+                "d13"
+            ],
+            "position": 0,
+            "owner": "abcxyz",
+            "secondMove": []
+        },
+        {
+            "name": "Dachshund",
+            "code": "d18",
+            "price": 4,
+            "abilityTime": "Khi tích Xương",
+            "abilityEffect": "Di chuyển chú chó được lắc ra +1.",
+            "image": "",
+            "secondMoveDefault": [
+                "d12",
+                "d14"
+            ],
+            "position": 0,
+            "owner": "abcxyz",
+            "secondMove": []
         }
     ],
     "playerList": [
