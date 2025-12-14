@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import PlayerList from "../components/PlayerList";
 import PlayersSection from "../components/Room/PlayersSection";
 import RollDiceSection from "../components/Room/RollDiceSection";
+import MapSection from "../components/Room/MapSection";
 import { gameConnection, useSignalRGame } from "../hooks/useSignalR";
 import PlayerBoardSection from "../components/Room/PlayerBoardSection"
 
@@ -36,7 +37,7 @@ export default function Room() {
                 setPlayTrigger(prev => prev + 1);
                 setDiceResult(message);
             })
-            
+
             gameConnection.on("SetAction", (message) => {
                 console.log('SetAction ', message);
                 setAllowedZones(message);
@@ -78,16 +79,24 @@ export default function Room() {
         <div className="w-screen h-screen max-h-screen relative p-4 border rounded flex flex-col overflow-hidden">
             <h1 className="text-xl text-center font-bold mb-4">Phòng</h1>
             <div className="Gamezone flex">
-                <PlayersSection players={players} />
-                <RollDiceSection
-                    rerollId={`${playTrigger}`}
-                    d6={diceResult.d6}
-                    d8={diceResult.d8}
-                    onSendSignalR={() => {
-                        console.log("Button clicked:");
-                        gameConnection.invoke("RerollDice", rid);
-                    }}
-                />
+                <div className="left-side shrink max-w-[300px]">
+                    <PlayersSection players={players} />
+                </div>
+                <div className="grow">
+                    <MapSection>
+                    </MapSection>
+                </div>
+                <div className="right-side shrink max-w-[300px]">
+                    <RollDiceSection
+                        rerollId={`${playTrigger}`}
+                        d6={diceResult.d6}
+                        d8={diceResult.d8}
+                        onSendSignalR={() => {
+                            console.log("Button clicked:");
+                            gameConnection.invoke("RerollDice", rid);
+                        }}
+                    />
+                </div>
                 <div className="fixed bottom-0 left-0 w-full flex justify-center">
                     <div className="flex justify-center p-3 border rounded-tl rounded-tr" style={{ width: '500px', height: '50px' }}
                         onClick={() => setShowPlayMat(!showPlayMat)}>
@@ -100,11 +109,11 @@ export default function Room() {
                         <PlayerBoardSection
                             width={210 * scaleRate}
                             allowedZones={allowedZones}   // zone được hover
-                            blockedZones={[2,6 , 10, 20,49,41,]}              // zone bị đánh dấu X
+                            blockedZones={[2, 6, 10, 20, 49, 41,]}              // zone bị đánh dấu X
                         />
                     </div>
                 </div>
-            </div> 
+            </div>
 
         </div>
     );

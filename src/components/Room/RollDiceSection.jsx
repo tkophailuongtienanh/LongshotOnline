@@ -109,12 +109,12 @@ export default function RollDiceSection({ rerollId, d6, d8, onSendSignalR }) {
     }, []);
 
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center w-full ">
             <canvas
                 ref={canvasRef}
                 width={500}
                 height={500}
-                className="border"
+                className="border max-w-full"
                 onClick={handleSignalR}
             />
             {/* Video + ảnh ẩn, chỉ dùng làm input cho canvas */}
